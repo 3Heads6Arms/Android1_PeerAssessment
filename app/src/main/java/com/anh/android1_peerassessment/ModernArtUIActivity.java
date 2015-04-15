@@ -1,9 +1,15 @@
 package com.anh.android1_peerassessment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.ActionBarActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +19,7 @@ import static android.widget.SeekBar.OnSeekBarChangeListener;
 
 
 public class ModernArtUIActivity extends ActionBarActivity {
-
+    // Implements listener
     private OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
 
         private int mProgress;
@@ -116,10 +122,34 @@ public class ModernArtUIActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_more_info) {
+            new PromptDialog().show(getFragmentManager(), "MOMA_Dialog");
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class PromptDialog extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                    .setView(getActivity().getLayoutInflater().inflate(R.layout.moma_dialog, null))
+                    .setNegativeButton("Not Now", new Dialog.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setPositiveButton("Visit MOMA", new Dialog.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String html = "http://www.moma.org/";
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(html));
+                            startActivity(intent);
+                        }
+                    })
+                    .create();
+        }
     }
 }
