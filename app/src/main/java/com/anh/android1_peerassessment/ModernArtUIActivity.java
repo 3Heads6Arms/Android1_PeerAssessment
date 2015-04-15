@@ -15,42 +15,33 @@ import static android.widget.SeekBar.OnSeekBarChangeListener;
 public class ModernArtUIActivity extends ActionBarActivity {
 
     private OnSeekBarChangeListener seekBarChangeListener = new OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            float[] oneOneHsv = new float[3];
-            float[] oneTwoHsv = new float[3];
-            float[] oneThreeHsv = new float[3];
-            float[] twoOneHsv = new float[3];
-            float[] twoTwoHsv = new float[3];
-            float[] threeOneHsv = new float[3];
-            float[] threeTwoHsv = new float[3];
 
-            // Transform colors value from int to hsv format
-            Color.colorToHSV(oneOneColor, oneOneHsv);
-            Color.colorToHSV(oneTwoColor, oneTwoHsv);
-            Color.colorToHSV(oneThreeColor, oneThreeHsv);
-            Color.colorToHSV(twoOneColor, twoOneHsv);
-            Color.colorToHSV(twoTwoColor, twoTwoHsv);
-            Color.colorToHSV(threeOneColor, threeOneHsv);
-            Color.colorToHSV(threeTwoColor, threeTwoHsv);
+        private int mProgress;
+
+        private void setViewBackground(View view, int color) {
+            float[] hsv = new float[3];
+
+            // Transform color to hsv format
+            Color.colorToHSV(color, hsv);
 
             // Calculate changes
-            oneOneHsv[0] = (oneOneHsv[0] + progress) % 360;
-            oneTwoHsv[0] = (oneTwoHsv[0] + progress) % 360;
-            oneThreeHsv[0] =(oneThreeHsv[0] + progress) % 360;
-            twoOneHsv[0] = (twoOneHsv[0] + progress) % 360;
-            twoTwoHsv[0] = (twoTwoHsv[0] + progress) % 360;
-            threeOneHsv[0] =(threeOneHsv[0] + progress) % 360;
-            threeTwoHsv[0] =(threeTwoHsv[0] + progress) % 360;
+            hsv[0] = (hsv[0] + mProgress) % 360;
 
-            // Set new Colors
-            vOneOne.setBackgroundColor(Color.HSVToColor(oneOneHsv));
-            vOneTwo.setBackgroundColor(Color.HSVToColor(oneTwoHsv));
-            vOneThree.setBackgroundColor(Color.HSVToColor(oneThreeHsv));
-            vTwoOne.setBackgroundColor(Color.HSVToColor(twoOneHsv));
-            vTwoTwo.setBackgroundColor(Color.HSVToColor(twoTwoHsv));
-            vThreeOne.setBackgroundColor(Color.HSVToColor(threeOneHsv));
-            vThreeTwo.setBackgroundColor(Color.HSVToColor(threeTwoHsv));
+            // Set Background color
+            view.setBackgroundColor(Color.HSVToColor(hsv));
+        }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            mProgress = progress;
+
+            setViewBackground(vOneOne, oneOneColor);
+            setViewBackground(vOneTwo, oneTwoColor);
+            setViewBackground(vOneThree, oneThreeColor);
+            setViewBackground(vTwoOne, twoOneColor);
+            setViewBackground(vTwoTwo, twoTwoColor);
+            setViewBackground(vThreeOne, threeOneColor);
+            setViewBackground(vThreeTwo, threeTwoColor);
         }
 
         @Override
